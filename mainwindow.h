@@ -25,7 +25,6 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    void crearmapa(QGraphicsScene *escena, char tablero[31][29]);
     void keyPressEvent(QKeyEvent *teclas);//para las teclas del teclado
     ~MainWindow();
     bool colision();

@@ -10,40 +10,8 @@
 #include <QPointF>
 #include "objetos.h"
 #include "bloque.h"
+#include "mapa.h"
 
-char tablero[31][29]={
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxx"},
-    {"xccccccccccccxxccccccccccccx"},
-    {"xcxxxxcxxxxxcxxcxxxxxcxxxxcx"},
-    {"xCx  xcx   xcxxcx   xcx  xCx"},
-    {"xcxxxxcxxxxxcxxcxxxxxcxxxxcx"},
-    {"xccccccccccccccccccccccccccx"},
-    {"xcxxxxcxxcxxxxxxxxcxxcxxxxcx"},
-    {"xcxxxxcxxcxxxxxxxxcxxcxxxxcx"},
-    {"xccccccxxccccxxccccxxccccccx"},
-    {"xxxxxxcxxxxxcxxcxxxxxcxxxxxx"},
-    {"     xcxxxxxcxxcxxxxxcx     "},
-    {"     xcxx          xxcx     "},
-    {"     xcxx xxx  xxx xxcx     "},
-    {"xxxxxxcxx x      x xxcxxxxxx"},
-    {"x     c   x ffff x   c     x"},
-    {"xxxxxxcxx x      x xxcxxxxxx"},
-    {"     xcxx xxxxxxxx xxcx     "},
-    {"     xcxx    p     xxcx     "},
-    {"     xcxx xxxxxxxx xxcx     "},
-    {"xxxxxxcxx xxxxxxxx xxcxxxxxx"},
-    {"xccccccccccccxxccccccccccccx"},
-    {"xcxxxxcxxxxxcxxcxxxxxcxxxxcx"},
-    {"xcxxxxcxxxxxcxxcxxxxxcxxxxcx"},
-    {"xCccxxccccccc ccccccccxxccCx"},
-    {"xxxcxxcxxcxxxxxxxxcxxcxxcxxx"},
-    {"xxxcxxcxxcxxxxxxxxcxxcxxcxxx"},
-    {"xccccccxxccccxxccccxxccccccx"},
-    {"xcxxxxxxxxxxcxxcxxxxxxxxxxcx"},
-    {"xcxxxxxxxxxxcxxcxxxxxxxxxxcx"},
-    {"xccccccccccccccccccccccccccx"},
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxx"}
-};
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {   ui->setupUi(this);//preferible dejarlo de primero
@@ -58,12 +26,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     //damos un pacman base por si le damos pocicion con el mapa//lo mismo con los fantasmas
 
 
-    personaje[base]=new objetos(":/imagenes/pacman/a1.png",ancho_sprite,alto_sprite);//la imagen que queremos proyectar del pacman
-    movimiento=personaje[base];//paara ensayar funcion comer
+
     fantasmas();
 
     //Mapa
-    crearmapa(escena,tablero);
+    mapa(escena);
     setStyleSheet("background-color: black;");
 
     //ahora agregamos qtimer
@@ -326,7 +293,7 @@ void MainWindow::keyPressEvent(QKeyEvent *teclas)
     }}
 
 
-void MainWindow::crearmapa(QGraphicsScene *escena, char tablero[31][29]){
+void MainWindow::crearmapa(QGraphicsScene *escena, char tablero[31][30]){
     // Calcular el ancho y alto de cada cada cuadro en la matriz
     int  anchoc = 20;
     int  altoc =  20;
@@ -334,7 +301,7 @@ void MainWindow::crearmapa(QGraphicsScene *escena, char tablero[31][29]){
 
 
     for (int y = 0; y < 31; y++) {
-       for (int x = 0; x < 29; x++) {
+       for (int x = 0; x < 30; x++) {
            if (tablero[y][x] == 'x') {
                // Calcular la posición del objeto muro
                int posX = x * anchoc;

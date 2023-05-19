@@ -11,15 +11,21 @@ CONFIG += c++17
 SOURCES += \
     bloque.cpp \
     comida.cpp \
+    juego.cpp \
     main.cpp \
     mainwindow.cpp \
-    objetos.cpp
+    mapa.cpp \
+    objetos.cpp \
+    personaje.cpp
 
 HEADERS += \
     bloque.h \
     comida.h \
+    juego.h \
     mainwindow.h \
-    objetos.h
+    mapa.h \
+    objetos.h \
+    personaje.h
 
 FORMS += \
     mainwindow.ui
