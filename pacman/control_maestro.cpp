@@ -27,8 +27,9 @@ control_maestro::control_maestro(MainWindow* mainWindow)
     QObject::connect(timer_enemigos, SIGNAL(timeout()), fantasmas, SLOT(mover()));
          timer_enemigos->start(60); // Intervalo de tiempo en milisegundos para mover a los enemigos (ajusta según tus necesidades)
 
-
-
+    QTimer *timerColisiones = new QTimer(this);
+    connect(timerColisiones, &QTimer::timeout, this, &control_maestro::colisionesfantasmas);
+    timerColisiones->start(60);
 
     pantalla_juego->getUI()->graphicsView->setScene(escena);
          direccion='z';
@@ -64,7 +65,6 @@ void control_maestro::comer_c()
             delete *it;
             it=bolitas.erase(it);
         }
-
         else{
             ++it;
         }
@@ -90,40 +90,109 @@ control_maestro::~control_maestro()
 
 void control_maestro::mover_personaje_auto()
 {
-pacman->moverV2(direccion);
+    telepor_pacman(pacman->movimiento->x(),pacman->movimiento->y());
 
-if(pacman->x_o_y=='w'){
 
-    if(colision(pacman->movimiento->x(),pacman->movimiento->y()-pacman->velocidad,direccion)==false){
-        pacman->moverV2(direccion);
-    }}
+    if (pacman->x_o_y=='w' and inicio_juego ==true) { // Arriba
+        direccion='w';
 
-    else if(pacman->x_o_y=='s'){
-        if(colision(pacman->movimiento->x(),pacman->movimiento->y()+pacman->velocidad,direccion)==false){
+        if(colision(pacman->movimiento->x(),pacman->movimiento->y()-pacman->velocidad,direccion)==false){//aqui hacemos que haga el paso para verificar si se puede hacer
+            escena->removeItem(pacman->movimiento);
+            pacman->get_personaje_p(n_arriba)->setY(pacman->movimiento->y());//le damos la pocicion en x y y del personaje
+            pacman->get_personaje_p(n_arriba)->setX(pacman->movimiento->x());
+            pacman->movimiento=pacman->get_personaje_p(n_arriba);
             pacman->moverV2(direccion);
+            fin_de_juego();
+            comer_c();
+            pacman->x_o_y='w';
+            escena->addItem(pacman->movimiento);}
+
+        else{
+            escena->removeItem(pacman->movimiento);
+            pacman->get_personaje_p(n_base)->setY(pacman->movimiento->y());//le damos la pocicion en x y y del personaje
+            pacman->get_personaje_p(n_base)->setX(pacman->movimiento->x());
+            pacman->movimiento=pacman->get_personaje_p(n_base);
+            escena->addItem(pacman->movimiento);
         }
+
+
+
     }
+    else if (pacman->x_o_y=='s' and inicio_juego ==true) { // abajo
+        direccion='s';
 
-    else if(pacman->x_o_y=='a'){
-
-        if(colision(pacman->movimiento->x()-pacman->velocidad,pacman->movimiento->y(),direccion)==false){
+        if(colision(pacman->movimiento->x(),pacman->movimiento->y()+pacman->velocidad,direccion)==false){
+            escena->removeItem(pacman->movimiento);
+            pacman->get_personaje_p(n_abajo)->setY(pacman->movimiento->y());//le damos la pocicion en x y y del personaje
+            pacman->get_personaje_p(n_abajo)->setX(pacman->movimiento->x());
+            pacman->movimiento=pacman->get_personaje_p(n_abajo);
             pacman->moverV2(direccion);
-        }}
+            fin_de_juego();
+            comer_c();
+            pacman->x_o_y='s';
+            escena->addItem(pacman->movimiento);}
+        else{
+            escena->removeItem(pacman->movimiento);
+            pacman->get_personaje_p(n_base)->setY(pacman->movimiento->y());//le damos la pocicion en x y y del personaje
+            pacman->get_personaje_p(n_base)->setX(pacman->movimiento->x());
+            pacman->movimiento=pacman->get_personaje_p(n_base);
+            escena->addItem(pacman->movimiento);
+        }
 
-    else if(pacman->x_o_y=='d'){
+    }
+    else if (pacman->x_o_y=='d' and inicio_juego ==true) { // derecha
+        direccion='d';
 
         if(colision(pacman->movimiento->x()+pacman->velocidad,pacman->movimiento->y(),direccion)==false){
+            escena->removeItem(pacman->movimiento);
+            pacman->get_personaje_p(n_derecha)->setY(pacman->movimiento->y());//le damos la pocicion en x y y del personaje
+            pacman->get_personaje_p(n_derecha)->setX(pacman->movimiento->x());
+            pacman->movimiento=pacman->get_personaje_p(n_derecha);
             pacman->moverV2(direccion);
-        }}
+            fin_de_juego();
+            comer_c();
+            pacman->x_o_y='d';
+            escena->addItem(pacman->movimiento);}
+        else{
+            escena->removeItem(pacman->movimiento);
+            pacman->get_personaje_p(n_base)->setY(pacman->movimiento->y());//le damos la pocicion en x y y del personaje
+            pacman->get_personaje_p(n_base)->setX(pacman->movimiento->x());
+            pacman->movimiento=pacman->get_personaje_p(n_base);
+            escena->addItem(pacman->movimiento);
+        }
 
+    }
+    else if (pacman->x_o_y=='a' and inicio_juego ==true) { // izquierda
+        direccion='a';
 
+        if(colision(pacman->movimiento->x()-pacman->velocidad,pacman->movimiento->y(),direccion)==false){
+            escena->removeItem(pacman->movimiento);
+            pacman->get_personaje_p(n_izquierda)->setY(pacman->movimiento->y());//le damos la pocicion en x y y del personaje
+            pacman->get_personaje_p(n_izquierda)->setX(pacman->movimiento->x());
+            pacman->movimiento=pacman->get_personaje_p(n_izquierda);
+            pacman->moverV2(direccion);
+            fin_de_juego();
+            comer_c();
+            pacman->x_o_y='a';
+            escena->addItem(pacman->movimiento);}
+
+        else{
+            escena->removeItem(pacman->movimiento);
+            pacman->get_personaje_p(n_base)->setY(pacman->movimiento->y());//le damos la pocicion en x y y del personaje
+            pacman->get_personaje_p(n_base)->setX(pacman->movimiento->x());
+            pacman->movimiento=pacman->get_personaje_p(n_base);
+            escena->addItem(pacman->movimiento);
+        }
+
+    }
 
 }
 
 void control_maestro::agregarMovimiento()//esto seria para el movimiento automatico
 {
-    timer = new QTimer();
-    //QObject::connect(timer, SIGNAL(timeout()), this, SLOT(control_maestro::mover_personaje_auto()));
+    timer = new QTimer;
+    //connect(timer, SIGNAL(timeout()), this, SLOT(mover_personaje_auto()));
+    connect(timer, &QTimer::timeout, this, &control_maestro::mover_personaje_auto);
     timer->start(50);
 }
 
@@ -160,6 +229,7 @@ void control_maestro::keyPressEvent(QKeyEvent* event)
 
 
     }
+
     else if (event->key() == Qt::Key_S and inicio_juego ==true) { // abajo
         direccion='s';
 
@@ -235,6 +305,7 @@ void control_maestro::crearmapa(QGraphicsScene *escena, char tablero[31][29]){
     int  anchoc = 20;
     int  altoc =  20;
     int cantidad_fantasmas=0;
+    //macros
     pantalla_juego->tamaño_de_la_escena(0,0,560,650);//aqui le damos el tamaño a la escena
     pantalla_juego->setGeometry(0,0,562,652);//aqui le damos tamaño al la pantalla
 
@@ -454,17 +525,27 @@ else if (direccion == 'a') {
 return false;
 }
 
-
-
-
 void control_maestro::telepor_pacman(int posx, int posy)
 {
-
  if (posx>=560 and posy==280){
      pacman->movimiento->setPos(-10,280);
  }
  else if (posx<=-20 and posy==280)
      pacman->movimiento->setPos(550,280);
+}
+
+void control_maestro::colisionesfantasmas()
+{
+ for (int i = 0; i < 4; i++) {
+     QGraphicsItem* fantasma = fantasmas->get_enemigo(i);
+
+     if (pacman->movimiento->collidesWithItem(fantasma)) {
+        inicio_juego=false;
+        perdiste=new objetos(":/imagenes/game over.jpg",560,650);
+        escena->addItem(perdiste);
+        pantalla_juego->getUI()->graphicsView->setScene(escena);
+     }
+ }
 }
 
 void control_maestro::fin_de_juego()
@@ -486,5 +567,6 @@ void control_maestro::fin_de_juego()
  }
 
 }
+
 
 

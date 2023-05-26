@@ -55,10 +55,6 @@ int comida_t;
 objetos *personaje_p[caras_personaje];
 //agregamos un char que sera el que indicara a que direcion se mueve de manera const el pacman
 
-
-
-
-
 };
 
 #endif // PERSONAJE_H

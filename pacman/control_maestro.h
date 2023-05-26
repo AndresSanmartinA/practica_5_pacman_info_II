@@ -50,10 +50,13 @@ public:
     bool comer(int posx_inc, int posy_inc, char direccion);
     void telepor_pacman(int posx, int posy);
     void fin_de_juego();
+    void colisionesfantasmas();
 
 public slots://la utilizamos para el Qtimer
     void mover_personaje_auto();
     void aggrgarMovimiento_comida();
+
+
 private:
     bool inicio_juego;
     bool colision_enemigo;
@@ -70,6 +73,7 @@ private:
     QTimer* timer;
     QTimer* timer_enemigos;
     QTimer* timer_comida;
+    QTimer* timerColisiones;
     bloque *muro;
     comida *bolita;
     objetos* finjuego;
